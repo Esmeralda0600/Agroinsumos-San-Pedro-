@@ -1,0 +1,60 @@
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongo_srv
+    restart: always
+    volumes:
+      - ./mongo/init.js:/docker-entrypoint-initdb.d/init.js  #carga el archivo con valores iniciales
+      - ./mongo/data:/data/db #Guarda los datos 
+
+    ports:
+      - "27017:27017"
+    networks:
+      - services_net
+
+  api:
+    build: ./api
+    container_name: api_srv
+    restart: always
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/agro_spa_DB
+    ports:
+      - "3000:3000"
+    volumes:      
+      - ./api:/usr/src/app  # Mounts the API source code
+      # - ./api/node_modules:/usr/src/app/node_modules
+      - /usr/src/app/node_modules  # Prevents overwriting node_modules
+
+    command: ["npm", "run", "dev"]
+    networks:
+      - services_net
+
+  web_users:
+    image: php:8.3-apache
+    container_name: web_users_srv
+    volumes:
+      - ./web/Interfaz_user:/var/www/html
+    ports:
+      - "8181:80"
+    depends_on:
+      - api
+    networks:
+      - services_net
+
+  web_admin:
+    image: php:8.3-apache
+    container_name: web_admin_srv
+    volumes:
+      - ./web/Intefaz_admin:/var/www/html
+    ports:
+      - "8182:80"
+    depends_on:
+      - api
+    networks:
+      - services_net
+
+networks:
+  services_net:
+    driver: bridge
