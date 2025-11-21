@@ -141,3 +141,57 @@ const proveedoresSchema = new mongoose.Schema({
 });
 
 export const ProveedorMongo = mongoose.model("proveedor", proveedoresSchema, "proveedores");
+
+const categoriasSchema = new mongoose.Schema({ 
+    nombre_categoria: {
+        type: String,
+        required: [true, "El nombre de la categoria es obligatorio"],
+        trim: true
+    },
+    direccion_img: {
+        type: String,
+        trim: true
+    }
+});
+
+export const CategoriaMongo = mongoose.model("categoria", categoriasSchema, "categorias");
+
+const marcasSchema = new mongoose.Schema({
+    id_marcas: {
+        type: String,
+        required: [true, "El id de la marca es obligatorio"],
+        unique: true,
+        trim: true
+    },
+    nombre_marca: {
+        type: String,
+        required: [true, "El nombre de la marca es obligatorio"],
+        trim: true
+    },
+    direccion_img: {
+        type: String,
+        trim: true
+    }
+});
+
+export const MarcaMongo = mongoose.model("marca", marcasSchema, "marcas");
+
+const ingredientesSchema = new mongoose.Schema({
+    id_ingrediente: {
+        type: String,
+        required: [true, "El id de la ingrediente es obligatorio"],
+        unique: true,
+        trim: true
+    },
+    nombre_ingrediente: {
+        type: String,
+        required: [true, "El nombre de la ingrediente es obligatorio"],
+        trim: true
+    },
+    direccion_img: {
+        type: String,
+        trim: true
+    }
+});
+
+export const IngredienteMongo = mongoose.model("ingrediente", ingredientesSchema, "ingredientes");

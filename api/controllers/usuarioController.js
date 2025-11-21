@@ -1,4 +1,4 @@
-import { UsuarioMongo } from "../models/mongoModels.js";
+import { UsuarioMongo , CategoriaMongo, MarcaMongo, IngredienteMongo} from "../models/mongoModels.js";
 import bcrypt from "bcryptjs";
 
 // ========================
@@ -26,25 +26,34 @@ export async function crearUsuario(req, res) {
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
-    // Validar formato del correo
+    // Validación longitud usuario
+    if (nombre_usuario.length > 10) {
+      return res.status(400).json({ error: "El nombre de usuario no puede tener más de 10 caracteres" });
+    }
+
+    if (nombre_usuario.length < 3) {
+      return res.status(400).json({ error: "El nombre de usuario debe tener al menos 3 caracteres" });
+    }
+
+    // Validar formato correo
     const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
     if (!correoValido) {
       return res.status(400).json({ error: "Formato de correo inválido" });
     }
 
-    // Verificar si ya existe
+    // Verificar si el correo ya existe
     const existe = await UsuarioMongo.findOne({ correo });
     if (existe) {
       return res.status(400).json({ error: "El correo ya está registrado" });
     }
 
-    // Encriptar la contraseña
+    // Encriptar contraseña
     const hash = await bcrypt.hash(password, 10);
 
     const usuario = await UsuarioMongo.create({
       nombre_usuario,
       correo,
-      contraseña: hash     // <=== IMPORTANTE
+      contraseña: hash
     });
 
     res.status(201).json({
@@ -55,12 +64,11 @@ export async function crearUsuario(req, res) {
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "Error al crear usuario",
+      error: "Usuario existente",
       detalle: err.message
     });
   }
 }
-
 
 // ========================
 // LOGIN
@@ -73,13 +81,11 @@ export async function login_Usuario(req, res) {
       return res.status(400).json({ error: "Faltan datos" });
     }
 
-    // Buscar usuario
     const user = await UsuarioMongo.findOne({ correo });
     if (!user) {
       return res.status(400).json({ error: "Usuario no encontrado" });
     }
 
-    // Validar contraseña (comparar con el hash real)
     const passwordCorrecta = await bcrypt.compare(password, user.contraseña);
 
     if (!passwordCorrecta) {
@@ -100,3 +106,18 @@ export async function login_Usuario(req, res) {
     res.status(500).json({ error: "Error interno" });
   }
 }
+
+export async function mostrar_categorias(req, res) {
+  const mongoData = await CategoriaMongo.find();
+  res.json(mongoData);
+};
+
+export async function mostrar_marcas(req, res) {
+  const mongoData = await MarcaMongo.find();
+  res.json(mongoData );
+};
+
+export async function mostrar_ingredientes(req, res) {
+  const mongoData = await IngredienteMongo.find();
+  res.json(mongoData);
+};

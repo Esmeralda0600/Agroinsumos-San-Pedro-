@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Instalar dependencias
 RUN npm install 
+#RUN npm install --save-dev nodemon
 
 # Copiar el resto del proyecto
 COPY . .
