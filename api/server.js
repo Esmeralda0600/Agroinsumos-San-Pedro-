@@ -1,10 +1,13 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+//import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { connectMongo } from "./config/db.js";
 import agro_spa_routes from "./routes/agro_spa_routes.js";
 import agro_spa_routes_admin from "./routes/agro_spa_routes_admin.js";
+
+// ⭐ IMPORTANTE → Ruta de favoritos
+import favoritoRoutes from "./routes/favoritoRoutes.js";
 
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
@@ -42,6 +45,7 @@ app.get("/", (req, res) => {
 // Rutas 
 app.use("/usuarios", agro_spa_routes);
 app.use("/administratores",agro_spa_routes_admin)
+app.use("/favoritos", favoritoRoutes);   // ⭐ SE AGREGA ESTA
 
 // instancia de swagger
 const swaggerDocs = swaggerJSDoc(swaggerOptions);

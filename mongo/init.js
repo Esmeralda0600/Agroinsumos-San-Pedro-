@@ -26,3 +26,18 @@ db.usuarios.insertOne({
     correo : "Johan@gmail.com",
     password : "51234",
 });
+
+db.categorias.insertOne({ nombre: "SEMILLAS", img: "imgs/semillas.jpg" });
+db.categorias.insertOne({ nombre: "FERTILIZANTES", img: "imgs/fertilizantes.jpg" });
+db.categorias.insertOne({ nombre: "HERBICIDAS", img: "imgs/herbicidas.jpg" });
+db.categorias.insertOne({ nombre: "ADHERENTE", img: "imgs/adherentes.jpg" });
+
+db.marcas.insertOne({ nombre: "BAYER", img: "imgs/bayer.jpg" });
+db.marcas.insertOne({ nombre: "SYNGENTA", img: "imgs/sygenta.jpg" });
+db.marcas.insertOne({ nombre: "ULTRASOL", img: "imgs/ultrasol.jpg" });
+db.marcas.insertOne({ nombre: "AGROENZYMAS", img: "imgs/agroenzymas.jpg" });
+
+db.ingredientes.insertOne({ nombre: "GLIFOSATO", img: "imgs/ingrediente.jpg" });
+db.ingredientes.insertOne({ nombre: "ATRAZINA", img: "imgs/ingrediente.jpg" });
+db.ingredientes.insertOne({ nombre: "IMIDACLOPRID", img: "imgs/ingrediente.jpg" });
+db.ingredientes.insertOne({ nombre: "PARAQUAT", img: "imgs/ingrediente.jpg" });

@@ -7,6 +7,87 @@ if (btn_login){
     btn_login.addEventListener("click", login);
 }
 
+const radios = document.querySelectorAll('input[name="tipo-busqueda"]');
+//console.log(radios,"radios")
+if (radios){
+
+    const { mostrarTarjetas } = await import("./catalogo-animaciones.js");
+
+    try{
+        const resp = await fetch("http://localhost:3000/usuarios/categorias", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        console.log(resp)
+        if (!resp.ok) {
+            const errorData = await resp.json();
+            alert("Error: " + errorData.error); 
+        }
+        const data = await resp.json();
+        mostrarTarjetas(data, "CATÁLOGO DE PRODUCTOS");
+    }catch(error){
+        alert("Error de conexión. Intentenlo nuevamente");
+    }
+    radios.forEach(radio => {
+        radio.addEventListener("change", async(e) => {
+            if (e.target.value === "producto") {
+                try{
+                    const resp = await fetch("http://localhost:3000/usuarios/categorias", {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                    });
+                    console.log(resp)
+                    if (!resp.ok) {
+                        const errorData = await resp.json();
+                        alert("Error: " + errorData.error); 
+                        return;
+                    }
+                    const data = await resp.json();
+                    mostrarTarjetas(data, "CATÁLOGO DE PRODUCTOS");
+                }catch(error){
+                    alert("Error de conexión. Intentenlo nuevamente");
+                }
+                
+            } else if (e.target.value === "marca") {
+                try{
+                    const resp = await fetch("http://localhost:3000/usuarios/marcas", {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                    });
+                    if (!resp.ok) {
+                        const errorData = await resp.json();
+                        alert("Error: " + errorData.error); 
+                        return;
+                    }
+                    const data = await resp.json();
+                    mostrarTarjetas(data, "CATÁLOGO POR MARCA");
+
+                }catch(error){
+                    alert("Error de conexión. Intentenlo nuevamente");
+                }
+                
+            } else if (e.target.value === "ingrediente") {
+                try{
+                    const resp = await fetch("http://localhost:3000/usuarios/ingrediente", {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                    });
+                    if (!resp.ok) {
+                        const errorData = await resp.json();
+                        alert("Error: " + errorData.error); 
+                        return;
+                    }
+                    const data = await resp.json();
+                    mostrarTarjetas(data, "CATÁLOGO POR INGREDIENTE ACTIVO");
+                }catch(error){
+                    alert("Error de conexión. Intentenlo nuevamente");
+                }
+               
+            }
+        });
+    });
+}
+
 async function registrar_usuario() {
 
     // tomar valores en el momento del clic
